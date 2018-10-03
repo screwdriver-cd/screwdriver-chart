@@ -8,8 +8,8 @@ This chart bootstraps the whole screwdriver ecosystem and also nginx ingress con
 
 ## Installing the chart:
 Please set up the following secrets before installing the chart:
-- screwdriver-api-{{ .Value.env }}secrets
-- screwdriver-store-{{ .Value.env }}secrets
+- screwdriver-api-{{ .Value.env }}-secrets
+- screwdriver-store-{{ .Value.env }}-secrets
 
 After cloning the repo, to install the chart :
 

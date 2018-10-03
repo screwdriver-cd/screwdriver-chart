@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Value.env }}sdui
+  name: {{ .Value.env }}-sdui
   namespace: {{ .Value.namespace }}
   labels:
     app: ui
@@ -19,7 +19,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ .Value.env }}sdui
+  name: {{ .Value.env }}-sdui
   namespace: {{ .Value.namespace }}
   labels:
     app: ui
