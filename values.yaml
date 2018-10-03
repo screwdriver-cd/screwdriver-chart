@@ -6,7 +6,10 @@ namespace: test-screwdriver
 env: prod
 
 notifications:
-    enabled: false
+  enabled: false
+
+tls:
+  enabled: false    
 
 api:
   image: screwdrivercd/screwdriver:v0.5.466

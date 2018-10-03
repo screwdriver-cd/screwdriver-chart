@@ -1,4 +1,4 @@
-{{-if .Value.app.tls.enabled }}
+{{-if .Value.tls.enabled }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
