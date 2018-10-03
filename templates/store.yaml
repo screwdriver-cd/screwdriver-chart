@@ -1,0 +1,91 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Value.env }}sdstore
+  namespace: {{ .Value.namespace }}
+  labels:
+    app: store
+    env: {{ .Value.env }}
+    tier: svc
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: store
+    env: {{ .Value.env }}
+    tier: app
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Value.env }}sdstore
+  namespace: {{ .Value.namespace }}
+  labels:
+    app: store
+    env: {{ .Value.env }}
+    tier: app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: store
+      env: {{ .Value.env }}
+      tier: app
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: store
+        env: {{ .Value.env }}
+        tier: app
+    spec:
+      containers:
+      - env:
+        - name: SECRET_JWT_PUBLIC_KEY
+          valueFrom:
+            secretKeyRef:
+              key: jwtpublickey
+              name: screwdriver-api-{{ .Value.env }}secrets
+        - name: S3_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              key: keyid
+              name: screwdriver-store-{{ .Value.env }}secrets
+        - name: S3_ACCESS_KEY_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: accesskey
+              name: screwdriver-store-{{{ .Value.env }}secrets
+        - name: S3_REGION
+          value: {{ .Value.store.s3.region }}
+        - name: S3_BUCKET
+          value: {{ .Value.store.s3.bucketName }}
+        - name: STRATEGY
+          value: s3
+        - name: BUILDS_EXPIRE_TIME
+          value: "7776000000"
+        - name: URI
+          value: {{ .Value.store.uri }}
+        - name: ECOSYSTEM_UI
+          value: {{ .Value.ui.uri }}
+        - name: S3_SIG_VER
+          value: "v4"
+        # Currently uses a private docker image because the updated version wasn't published yet
+        image: {{ .Value.store.image }}
+        imagePullPolicy: IfNotPresent
+        name: screwdriver-store
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

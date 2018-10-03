@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Value.env }}sdui
+  namespace: {{ .Value.namespace }}
+  labels:
+    app: ui
+    tier: svc
+    env: {{ .Value.env }}
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: ui
+    tier: app
+    env: {{ .Value.env }}
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Value.env }}sdui
+  namespace: {{ .Value.namespace }}
+  labels:
+    app: ui
+    tier: deploy
+    env: {{ .Value.env }}
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: ui
+        tier: app
+        env: {{ .Value.env }}
+    spec:
+      containers:
+      - name: screwdriver-ui
+        image: {{ .Value.ui.image }}
+        ports:
+        - containerPort: 80
+        env:
+          - name: ECOSYSTEM_API
+            value: {{ .Value.api.uri }}
+          - name: ECOSYSTEM_STORE
+            value: {{ .Value.store.uri }}
+          - name: AVATAR_HOSTNAME
+            value: {{ .Value.ui.scmAvartarHost }}
