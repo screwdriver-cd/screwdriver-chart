@@ -27,7 +27,7 @@ metadata:
     env: {{ .Value.env }}
     tier: app
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: api

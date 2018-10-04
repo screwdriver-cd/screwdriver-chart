@@ -48,7 +48,7 @@ metadata:
   name: nginx
   namespace: {{ .Value.namespace }}
 spec:
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:

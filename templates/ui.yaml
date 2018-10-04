@@ -26,7 +26,7 @@ metadata:
     tier: deploy
     env: {{ .Value.env }}
 spec:
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
