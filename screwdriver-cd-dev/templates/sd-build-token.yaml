@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Release.Name }}-sd-build-token
+  namespace: {{ .Values.common.namespace }}
+  annotations:
+    kubernetes.io/service-account.name: {{ .Release.Name }}-sd-build
+type: kubernetes.io/service-account-token

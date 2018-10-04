@@ -1,0 +1,112 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-sdapi
+  namespace: {{ .Values.common.namespace }}
+spec:
+  replicas: {{ .Values.api.replicas }}
+  selector:
+    matchLabels:
+      app: screwdriver
+      tier: api
+      env: {{ .Values.common.env }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: screwdriver
+        tier: api
+        env: {{ .Values.common.env }}
+    spec:
+      serviceAccount: {{ .Release.Name }}-sd-build
+      containers:
+      - name: screwdriver-api
+        image: {{ .Values.api.image }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        # Validate that the service is started
+        livenessProbe:
+          httpGet:
+            path: /v4/status
+            port: 80
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
+        # Validate that the service is reached
+        readinessProbe:
+          httpGet:
+            path: /v4/status
+            port: 80
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
+        # Environment variables that point to your secrets in your secrets.yaml
+        env:
+          - name: DATASTORE_PLUGIN
+            value: sequelize
+          - name: DATASTORE_SEQUELIZE_DIALECT
+            value: mysql
+          - name: DATASTORE_SEQUELIZE_HOST
+            value: {{ .Release.Name }}-mysql
+          - name: DATASTORE_SEQUELIZE_DATABASE
+            value: {{ .Values.mysql.mysqlDatabase }}
+          - name: DATASTORE_SEQUELIZE_PORT
+            value: "3306"
+          - name: DATASTORE_SEQUELIZE_USERNAME
+            value: root
+          - name: DATASTORE_SEQUELIZE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-mysql
+                key: mysql-root-password
+          - name: URI
+            value: {{ include "ecosystem_api" . }}
+          - name: PORT
+            value: "80"
+          - name: ECOSYSTEM_UI
+            value: {{ include "ecosystem_ui" . }}
+          - name: ECOSYSTEM_STORE
+            value: {{ include "ecosystem_store" . }}
+          - name: IS_HTTPS
+            value: "false"
+          - name: SECRET_WHITELIST
+            value: "[]"
+          - name: SECRET_ADMINS
+            value: "[]"
+          - name: SCM_USERNAME
+            value: "ap-screwdriver"
+          - name: SCM_SETTINGS
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-sd-secrets
+                key: scm_settings
+          - name: SECRET_JWT_PRIVATE_KEY
+            value: |
+              {{- include "jwt_private" . | indent 14}}
+          - name: SECRET_JWT_PUBLIC_KEY
+            value: |
+              {{- include "jwt_public" . | indent 14}}
+          - name: SECRET_PASSWORD
+            value: {{ randAlphaNum 32 }}
+          - name: SECRET_COOKIE_PASSWORD
+            value: {{ randAlphaNum 32 }}
+          - name: EXECUTOR_PLUGIN
+            value: queue
+          - name: EXECUTOR_QUEUE_ENABLED
+            value: "true"
+          - name: QUEUE_REDIS_HOST
+            value: {{ .Release.Name }}-redis-master
+          - name: QUEUE_REDIS_PORT
+            value: "6379"
+          - name: QUEUE_REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-redis
+                key: redis-password
+          - name: AUTH_GUEST_ACCESS
+            value: "false"

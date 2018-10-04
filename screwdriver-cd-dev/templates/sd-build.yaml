@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: {{ .Values.common.namespace }}
+  name: {{ .Release.Name }}-sd-build
+  annotations:
+    "helm.sh/hook": "pre-install"
