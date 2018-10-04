@@ -1,0 +1,50 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-sdui
+  namespace: {{ .Values.common.namespace }}
+spec:
+  replicas: {{ .Values.api.replicas }}
+  selector:
+    matchLabels:
+      app: screwdriver
+      tier: ui
+      env: {{ .Values.common.env }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: screwdriver
+        tier: ui
+        env: {{ .Values.common.env }}
+    spec:
+      containers:
+      - name: screwdriver-ui
+        image: {{ .Values.ui.image }}
+        ports:
+        - containerPort: 80
+        # Validate that the service is started
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
+        # Validate that the service is reached
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
+        env:
+          - name: ECOSYSTEM_API
+            value: {{ include "ecosystem_api" . }}
+          - name: ECOSYSTEM_STORE
+            value: {{ include "ecosystem_store" . }}

@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-sdworker
+  namespace: {{ .Values.common.namespace }}
+spec:
+  replicas: {{ .Values.common.replicas }}
+  selector:
+    matchLabels:
+      app: screwdriver
+      tier: worker
+      env: {{ .Values.common.env }}
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: screwdriver
+        tier: worker
+        env: {{ .Values.common.env }}
+    spec:
+      containers:
+      - name: screwdriver-worker
+        image: {{ .Values.worker.image }}
+        env:
+          - name: REDIS_HOST
+            value: {{ .Release.Name }}-redis-master
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-redis
+                key: redis-password
+          - name: PLUGIN_BLOCKEDBY_BLOCKED_BY_SELF
+            value: "false"
+          - name: EXECUTOR_PLUGIN
+            value: k8s
+          - name: K8S_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-sd-build-token
+                key: token
+          - name: K8S_JOBS_NAMESPACE
+            value: {{ .Values.common.namespace }}
+          - name: LAUNCH_VERSION
+            value: {{ .Values.worker.launchVersion }}
+          - name: ECOSYSTEM_API
+            value: {{ include "ecosystem_api" . }}
+          - name: ECOSYSTEM_STORE
+            value: {{ include "ecosystem_store" . }}
+          - name: K8S_BASE_IMAGE
+            value: {{ .Values.worker.baseImage }}
+          - name: K8S_MEMORY_LOW
+            value: {{ .Values.worker.k8sMemory | quote }}
+          - name: K8S_CPU_LOW
+            value: {{ .Values.worker.k8sCPU | quote }}
+          - name: K8S_MAX_BUILD_TIMEOUT
+            value: "720"
+          - name: K8S_VM_MAX_BUILD_TIMEOUT
+            value: "720"

@@ -1,0 +1,47 @@
+# Default values for screwdriver-cd-dev.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+common:
+  namespace: default
+  env: dev
+  ecosystemAPI:  http://<your-node>
+  ecosystemUI:  http://<your-node>
+  ecosystemStore:  http://<your-node>
+
+api:
+  replicas: 1
+  image: screwdrivercd/screwdriver:v0.5.464
+  oauthClientId: REPLACE_ME
+  oauthClientSecret: REPLACE_ME
+  nodePort: 30009
+
+ui:
+  replicas: 1
+  image: screwdrivercd/ui:v1.0.329
+  nodePort: 30008
+
+store:
+  replicas: 1
+  image: screwdrivercd/store:v3.1.5
+  nodePort: 30007
+
+worker:
+  replicas: 1
+  image: screwdrivercd/queue-worker:v2.2.0
+  launchVersion: v5.0.17
+  baseImage: screwdrivercd/hyperctl-image:v1.0.3
+  k8sMemory: 1
+  k8sCPU: 1
+
+# mysql settings
+mysql:
+  persistence:
+    enabled: false
+  mysqlDatabase: sdcd_dev
+
+# redis settings
+redis:
+  master:
+    persistence:
+      enabled: false
