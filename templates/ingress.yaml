@@ -1,29 +1,29 @@
-{{-if .Value.tls.enabled }}
+{{- if .Values.tls.enabled }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: ingress
-  namespace: {{ .Value.namespace }}
+  namespace: {{ .Values.namespace }}
   annotations:
     kubernetes.io/tls-acme: "true"
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-  - host: {{ .Value.ui.host }}
+  - host: {{ .Values.ui.host }}
     http:
       paths:
       - backend:
           serviceName: sdui
           servicePort: 80
         path: /
-  - host: {{ .Value.api.host }}
+  - host: {{ .Values.api.host }}
     http:
       paths:
       - backend:
           serviceName: sdapi
           servicePort: 80
         path: /
-  - host: {{ .Value.store.host }}
+  - host: {{ .Values.store.host }}
     http:
       paths:
       - backend:
@@ -32,44 +32,44 @@ spec:
         path: /
   tls:
   - hosts:
-    - {{ .Value.ui.host }}
+    - {{ .Values.ui.host }}
     secretName: screwdriver-ui-tls
   - hosts:
-    - {{ .Value.api.host }}
+    - {{ .Values.api.host }}
     secretName: screwdriver-api-tls
   - hosts:
-    - {{ .Value.store.host }}
+    - {{ .Values.store.host }}
     secretName: screwdriver-store-tls
-{{-else }}
+{{- else }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: ingress
-  namespace: {{ .Value.namespace }}
+  namespace: {{ .Values.namespace }}
   annotations:
     kubernetes.io/tls-acme: "true"
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-  - host: {{ .Value.ui.host }}
+  - host: {{ .Values.ui.host }}
     http:
       paths:
       - path: /
         backend:
           serviceName: sdui
           servicePort: 80
-  - host: {{ .Value.api.host }}
+  - host: {{ .Values.api.host }}
     http:
       paths:
       - path: /
         backend:
           serviceName: sdapi
           servicePort: 80
-  - host: {{ .Value.store.host }}
+  - host: {{ .Values.store.host }}
     http:
       paths:
       - path: /
         backend:
           serviceName: sdstore
           servicePort: 80
-{{-end }}
+{{- end }}

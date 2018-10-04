@@ -13,18 +13,17 @@ tls:
 
 api:
   image: screwdrivercd/screwdriver:v0.5.468
-  uri: https://api.screwdriver.cd
+  uri: http://api.screwdriver.cd
   host: api.screwdriver.cd
 
 ui:
   image: screwdrivercd/ui:v1.0.337
-  uri: https://cd.screwdriver.cd
-  scmAvartarHost: *.githubusercontent.com
+  uri: http://cd.screwdriver.cd
   hosts: cd.screwdriver.cd
 
 store:
   image: screwdrivercd/store:v3.3.1
-  uri: https://store.screwdriver.cd
+  uri: http://store.screwdriver.cd
   host: store.screwdriver.cd
   s3:
     bucketName: s3.screwdriver
@@ -35,5 +34,5 @@ launcher:
     version: v5.0.20
 
 nginx:
-    image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.18.0
-    backend_image: gcr.io/google_containers/defaultbackend:1.0
+    image: "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.18.0"
+    backend_image: "gcr.io/google_containers/defaultbackend:1.0"
