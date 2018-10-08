@@ -8,8 +8,6 @@ rules:
   - apiGroups: ["*"]
     resources: ["*"]
     verbs: ["*"]
-  - nonResourceURLs: ["*"]
-    verbs: ["*"]
 
 ---
 # Full read access to the api and resources
@@ -22,5 +20,3 @@ rules:
   - apiGroups: ["*"]
     resources: ["*"]
     verbs: ["get", "list", "watch"]
-  - nonResourceURLs: ["*"]
-    verbs: ["*"]
