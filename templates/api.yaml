@@ -147,8 +147,3 @@ spec:
           {{- end }}
           - name: SECRET_WHITELIST
             value: '[]'
-          - name: ECOSYSTEM_ALLOW_CORS
-            valueFrom:
-              secretKeyRef:
-                key: allowcors
-                name: screwdriver-api-{{ .Values.env }}-secrets
