@@ -30,3 +30,28 @@ Create chart name and version as used by the chart label.
 {{- define "mychart.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Create urls for api, ui, store
+*/}}
+{{- define "api.uri" -}}
+{{- if .Values.tls.enabled -}}
+{{- printf "https://%s" .Values.api.host -}}
+{{- else -}}
+{{- printf "http://%s" .Values.api.host -}}
+{{- end -}}
+
+{{- define "ui.uri" -}}
+{{- if .Values.tls.enabled -}}
+{{- printf "https://%s" .Values.ui.host -}}
+{{- else -}}
+{{- printf "http://%s" .Values.ui.host -}}
+{{- end -}}
+
+{{- define "store.uri" -}}
+{{- if .Values.tls.enabled -}}
+{{- printf "https://%s" .Values.store.host -}}
+{{- else -}}
+{{- printf "http://%s" .Values.store.host -}}
+{{- end -}}
+

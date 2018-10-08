@@ -50,9 +50,6 @@ subjects:
   - kind: ServiceAccount
     name: ingress
     namespace: {{ .Values.namespace }}
-  - kind: ServiceAccount
-    name: ingress
-    namespace: {{ .Values.namespace }}
 roleRef:
   kind: ClusterRole
   name: cluster-writer
