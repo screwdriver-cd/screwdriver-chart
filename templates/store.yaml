@@ -52,6 +52,7 @@ spec:
             secretKeyRef:
               key: jwtpublickey
               name: screwdriver-api-{{ .Values.env }}-secrets
+        {{- if .Values.store.s3.useAccessKey }}
         - name: S3_ACCESS_KEY_ID
           valueFrom:
             secretKeyRef:
@@ -62,18 +63,23 @@ spec:
             secretKeyRef:
               key: accesskey
               name: screwdriver-store-{{ .Values.env }}-secrets
+        {{- end }}
         - name: S3_REGION
           value: {{ .Values.store.s3.region }}
         - name: S3_BUCKET
           value: {{ .Values.store.s3.bucketName }}
         - name: STRATEGY
+          {{- if .Values.store.s3.enabled }}
           value: s3
+          {{- else }}
+          value: memory
+          {{- end }}
         - name: BUILDS_EXPIRE_TIME
           value: "7776000000"
         - name: URI
-          value: {{ .Values.store.uri }}
+          value: {{ template "store.uri" . }}
         - name: ECOSYSTEM_UI
-          value: {{ .Values.ui.uri }}
+          value: {{ template "ui.uri" . }}
         - name: S3_SIG_VER
           value: "v4"
         # Currently uses a private docker image because the updated version wasn't published yet
@@ -83,9 +89,3 @@ spec:
         ports:
         - containerPort: 80
           protocol: TCP
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      securityContext: {}
-      terminationGracePeriodSeconds: 30

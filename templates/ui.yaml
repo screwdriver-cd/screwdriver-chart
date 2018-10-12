@@ -52,6 +52,6 @@ spec:
         - containerPort: 80
         env:
           - name: ECOSYSTEM_API
-            value: {{ .Values.api.uri }}
+            value: {{ template "api.uri" . }}
           - name: ECOSYSTEM_STORE
-            value: {{ .Values.store.uri }}
+            value: {{ template "store.uri" . }}

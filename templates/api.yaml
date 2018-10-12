@@ -66,24 +66,41 @@ spec:
           - name: LAUNCH_VERSION
             value: {{ .Values.launcher.version }}
           - name: EXECUTOR_PLUGIN
+            {{- if .Values.queue.enabled }}
+            value: queue
+            {{- else }}
             value: k8s
+            {{- end }}
+          {{- if .Values.queue.enabled }}
+          - name: EXECUTOR_QUEUE_ENABLED
+            value: "true"
+          - name: QUEUE_REDIS_HOST
+            value: {{ .Release.Name }}-redis-master
+          - name: QUEUE_REDIS_PORT
+            value: "6379"
+          - name: QUEUE_REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-redis
+                key: redis-password
+          {{- end }}
           - name: K8S_JOBS_NAMESPACE
             value: {{ .Values.namespace }}
           - name: K8S_TOKEN
             valueFrom:
               secretKeyRef:
-                name: screwdriver-api-{{ .Values.env }}-secrets
-                key: k8stoken
+                name: sd-buildbot-token
+                key: token
           - name: DATASTORE_PLUGIN
             value: sequelize
           - name: URI
-            value: {{ .Values.api.uri }}
+            value: {{ template "api.uri" . }}
           - name: PORT
             value: "80"
           - name: ECOSYSTEM_UI
-            value: {{ .Values.ui.uri }}
+            value: {{ template "ui.uri" . }}
           - name: ECOSYSTEM_STORE
-            value: {{ .Values.store.uri }}
+            value: {{ template "store.uri" . }}
           - name: SCM_SETTINGS
             valueFrom:
               secretKeyRef:
@@ -107,27 +124,18 @@ spec:
           - name: DATASTORE_SEQUELIZE_DIALECT
             value: postgres
           - name: DATASTORE_SEQUELIZE_HOST
-            valueFrom:
-              secretKeyRef:
-                name: screwdriver-api-{{ .Values.env }}-secrets
-                key: postgreshost
+            value: {{ template "postgresql.hostname" . }}
           - name: DATASTORE_SEQUELIZE_PREFIX
             value: "{{ .Values.env }}-"
           - name: DATASTORE_SEQUELIZE_PASSWORD
             valueFrom:
               secretKeyRef:
-                key: postgrespassword
-                name: screwdriver-api-{{ .Values.env }}-secrets
+                key: postgres-password
+                name: {{- if .Values.postgresql.enabled }} {{ template "postgresql.fullname" .}} {{- else }} "screwdriver-api-{{ .Values.env }}-secrets" {{- end }}
           - name: DATASTORE_SEQUELIZE_PORT
-            valueFrom:
-              secretKeyRef:
-                name: screwdriver-api-{{ .Values.env }}-secrets
-                key: postgresport
+            value: {{ .Values.postgresql.postgresPort | quote }}
           - name: DATASTORE_SEQUELIZE_USERNAME
-            valueFrom:
-              secretKeyRef:
-                key: postgresusername
-                name: screwdriver-api-{{ .Values.env }}-secrets
+            value: {{ .Values.postgresql.postgresUser | quote }}
           - name: SECRET_PASSWORD
             valueFrom:
               secretKeyRef:

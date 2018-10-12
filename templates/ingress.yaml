@@ -13,21 +13,21 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: sdui
+          serviceName: {{ .Values.env }}-sdui
           servicePort: 80
         path: /
   - host: {{ .Values.api.host }}
     http:
       paths:
       - backend:
-          serviceName: sdapi
+          serviceName: {{ .Values.env }}-sdapi
           servicePort: 80
         path: /
   - host: {{ .Values.store.host }}
     http:
       paths:
       - backend:
-          serviceName: sdstore
+          serviceName: {{ .Values.env }}-sdstore
           servicePort: 80
         path: /
   tls:
@@ -56,20 +56,20 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: sdui
+          serviceName: {{ .Values.env }}-sdui
           servicePort: 80
   - host: {{ .Values.api.host }}
     http:
       paths:
       - path: /
         backend:
-          serviceName: sdapi
+          serviceName: {{ .Values.env }}-sdapi
           servicePort: 80
   - host: {{ .Values.store.host }}
     http:
       paths:
       - path: /
         backend:
-          serviceName: sdstore
+          serviceName: {{ .Values.env }}-sdstore
           servicePort: 80
 {{- end }}

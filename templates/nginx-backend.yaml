@@ -1,3 +1,4 @@
+{{- if .Values.nginx.create -}}
 # Deployment for default http backend
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -48,3 +49,4 @@ spec:
     protocol: TCP
   selector:
     app: default-http-backend
+{{- end -}}
