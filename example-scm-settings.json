@@ -1,0 +1,13 @@
+{
+    "github": {
+        "plugin": "github",
+        "config": {
+            "oauthClientId": "{{oauthClientId}}",
+            "oauthClientSecret": "{{oauthClientSecret}}",
+            "username": "sd-buildbot",
+            "email": "dev-null@screwdriver.cd",
+            "secret": "{{oauthSecret}}",
+            "privateRepo": "false"
+        }
+    }
+}

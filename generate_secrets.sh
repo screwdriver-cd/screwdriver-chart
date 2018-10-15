@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if grep -q "{{" example-scm-settings.json; then
+  echo Please configure example-scm-settings.json with real value!
+  exit 1
+fi
+
 cp screwdriver-api-secrets.tmpl screwdriver-api-secrets.yaml
 
 for name in '{{cookiepassword}}' '{{encryptionpassword}}' '{{hashingpassword}}'
@@ -16,5 +21,8 @@ publickey=`cat jwt.pub | base64`
 
 sed -i.bak "s/{{jwtpublickey}}/$publickey/g" screwdriver-api-secrets.yaml
 sed -i.bak "s/{{jwtprivatekey}}/$privatekey/g" screwdriver-api-secrets.yaml
+
+scmsettings=`cat example-scm-settings.json | base64`
+sed -i.bak "s/{{scmsettings}}/$scmsettings/g" screwdriver-api-secrets.yaml
 
 rm screwdriver-api-secrets.yaml.bak

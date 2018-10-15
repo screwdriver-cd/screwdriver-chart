@@ -51,6 +51,8 @@ spec:
         ports:
         - containerPort: 80
         env:
+          - name: AVATAR_HOSTNAME
+            value: "{{ .Values.ui.avatarHost }}"
           - name: ECOSYSTEM_API
             value: {{ template "api.uri" . }}
           - name: ECOSYSTEM_STORE

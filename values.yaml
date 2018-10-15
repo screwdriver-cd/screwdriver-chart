@@ -9,25 +9,28 @@ env: prod
 rbac:
   enabled: false
 
-# Use tls or not
+# Use tls or not, if set to true, please refer to ingress.yaml and create tls secrets accordingly
+# Reference: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
 tls:
   enabled: false
 
-# Set up build notifications or not, if yes please create notification config as a secret
+# Set up build notifications or not, if yes please add notification config in your screwdirver-api-secret file
+# Reference config: https://github.com/screwdriver-cd/screwdriver/blob/master/config/default.yaml#L235
 notifications:
   enabled: false
 
 api:
   image: screwdrivercd/screwdriver:v0.5.475
-  host: api.screwdriver.cd
+  host: test-api.screwdriver.cd
 
 ui:
   image: screwdrivercd/ui:v1.0.337
-  host: cd.screwdriver.cd
+  host: test-cd.screwdriver.cd
+  avatarHost: "*.githubusercontent.com"
 
 store:
   image: screwdrivercd/store:v3.3.5
-  host: store.screwdriver.cd
+  host: test-store.screwdriver.cd
   # if s3 is not enabled, will use pod's memory to store logs, artifacts and that't non-persistent
   s3:
     enabled: false
@@ -41,13 +44,16 @@ launcher:
 
 # Enable queue feature or not, this will bring up a queue-worker pod and a redis pod
 queue:
-  enabled: false
+  enabled: true
   image: screwdrivercd/queue-worker:v2.2.3
 
 redis:
+  cluster:
+    enabled: false
   master:
     persistence:
-      enabled: false
+      enabled: true
+      size: 10Gi
 
 # To set up a new nginx or not
 nginx:

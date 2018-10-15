@@ -3,3 +3,5 @@ kind: ServiceAccount
 metadata:
   namespace: {{ .Values.namespace }}
   name: sd-buildbot
+annotations:
+  "helm.sh/hook": pre-install
