@@ -69,3 +69,6 @@ postgresql:
   # Specify the TCP port that PostgreSQL should use
   service:
     port: 5432
+  persistence:
+    enabled: true
+    size: 20Gi
