@@ -1,0 +1,55 @@
+{{- if .Values.queue.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Values.env }}-sdworker
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+      tier: app
+      env: {{ .Values.env }}
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: worker
+        tier: app
+        env: {{ .Values.env }}
+    spec:
+      containers:
+      - name: screwdriver-worker
+        image: {{ .Values.queue.image }}
+        env:
+          - name: QUEUE_REDIS_PORT
+            value: "6379"
+          - name: REDIS_HOST
+            value: {{ .Release.Name }}-redis-master
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-redis
+                key: redis-password
+          - name: EXECUTOR_PLUGIN
+            value: k8s
+          - name: K8S_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: sd-buildbot-token
+                key: token
+          - name: K8S_JOBS_NAMESPACE
+            value: {{ .Values.namespace }}
+          - name: LAUNCH_IMAGE
+            value: {{ .Values.launcher.image }}
+          - name: LAUNCH_VERSION
+            value: {{ .Values.launcher.version }}
+          - name: ECOSYSTEM_API
+            value: {{ template "api.uri" . }}
+          - name: ECOSYSTEM_STORE
+            value: {{ template "store.uri" . }}
+          - name: K8S_MAX_BUILD_TIMEOUT
+            value: "720"
+{{- end -}}

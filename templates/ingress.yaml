@@ -1,0 +1,75 @@
+{{- if .Values.tls.enabled }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress
+  namespace: {{ .Values.namespace }}
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: {{ .Values.ui.host }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Values.env }}-sdui
+          servicePort: 80
+        path: /
+  - host: {{ .Values.api.host }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Values.env }}-sdapi
+          servicePort: 80
+        path: /
+  - host: {{ .Values.store.host }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Values.env }}-sdstore
+          servicePort: 80
+        path: /
+  tls:
+  - hosts:
+    - {{ .Values.ui.host }}
+    secretName: screwdriver-ui-tls
+  - hosts:
+    - {{ .Values.api.host }}
+    secretName: screwdriver-api-tls
+  - hosts:
+    - {{ .Values.store.host }}
+    secretName: screwdriver-store-tls
+{{- else }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress
+  namespace: {{ .Values.namespace }}
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: {{ .Values.ui.host }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ .Values.env }}-sdui
+          servicePort: 80
+  - host: {{ .Values.api.host }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ .Values.env }}-sdapi
+          servicePort: 80
+  - host: {{ .Values.store.host }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ .Values.env }}-sdstore
+          servicePort: 80
+{{- end }}

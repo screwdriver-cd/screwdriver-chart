@@ -1,0 +1,80 @@
+# Default values for mychart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+namespace: test-screwdriver
+env: prod
+
+# Please enable it for RBAC enabled k8s cluster
+rbac:
+  enabled: false
+
+# Use tls or not, if set to true, please refer to ingress.yaml and create tls secrets accordingly
+# Reference: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+tls:
+  enabled: false
+
+# Set up build notifications or not, if yes please add notification config in your screwdirver-api-secret file
+# Reference config: https://github.com/screwdriver-cd/screwdriver/blob/master/config/default.yaml#L235
+notifications:
+  enabled: false
+
+api:
+  image: screwdrivercd/screwdriver:v0.5.475
+  host: test-api.screwdriver.cd
+
+ui:
+  image: screwdrivercd/ui:v1.0.337
+  host: test-cd.screwdriver.cd
+  avatarHost: "*.githubusercontent.com"
+
+store:
+  image: screwdrivercd/store:v3.3.5
+  host: test-store.screwdriver.cd
+  # if s3 is not enabled, will use pod's memory to store logs, artifacts and that't non-persistent
+  s3:
+    enabled: false
+    bucketName: your.s3.bucket.name
+    region: us-east-2
+    useAccessKey: false
+
+launcher:
+  image: screwdrivercd/launcher
+  version: v5.0.20
+
+# Enable queue feature or not, this will bring up a queue-worker pod and a redis pod
+queue:
+  enabled: true
+  image: screwdrivercd/queue-worker:v2.2.3
+
+redis:
+  cluster:
+    enabled: false
+  master:
+    persistence:
+      enabled: true
+      size: 10Gi
+
+# To set up a new nginx or not
+nginx:
+  create: false
+  image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.18.0
+  backend_image: gcr.io/google_containers/defaultbackend:1.0
+
+# Database for screwdriver api, can be either running as a pod or external
+postgresql:
+  enabled: true
+  # To use an external PostgreSQL instance, follow the steps:
+  # 1. add a record to your screwdirver-api-secret file with key postgres-password with real password
+  # 2. set postgressql enabled to false to prevent creation of postgres as a pod
+  # 3. uncomment the line below with your externl postgres server
+  # postgresServer: ""
+  postgresUser: "sdUser"
+  postgresPassword: "sdPassword"
+  postgresDatabase: "screwdriver"
+  # Specify the TCP port that PostgreSQL should use
+  service:
+    port: 5432
+  persistence:
+    enabled: true
+    size: 20Gi

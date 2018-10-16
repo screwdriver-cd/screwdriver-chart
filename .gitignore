@@ -1,0 +1,5 @@
+charts/*
+jwt.pem
+jwt.pub
+screwdriver-api-secrets.yaml
+screwdriver-store-secrets.yaml
