@@ -9,10 +9,24 @@ env: prod
 rbac:
   enabled: false
 
-# Use tls or not, if set to true, please refer to ingress.yaml and create tls secrets accordingly
-# Reference: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-tls:
-  enabled: false
+ingress:
+  # Use tls or not, if set to true, please refer to ingress.yaml and create tls secrets accordingly
+  # Reference: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  tls: false
+  hosts:
+    api: test-api.screwdriver.cd
+    ui: test-cd.screwdriver.cd
+    store: test-store.screwdriver.cd
+  # Enabled singleHost if your api, store, ui are sharing the same host with different path
+  singleHost:
+    enabled: false
+    # Same host with different path example
+    # apiPath: /api
+    # uiPath: /ui
+    # storePath: /store
+    apiPath: ""
+    uiPath: ""
+    storePath: ""
 
 # Set up build notifications or not, if yes please add notification config in your screwdirver-api-secret file
 # Reference config: https://github.com/screwdriver-cd/screwdriver/blob/master/config/default.yaml#L235
@@ -21,11 +35,9 @@ notifications:
 
 api:
   image: screwdrivercd/screwdriver:v0.5.475
-  host: test-api.screwdriver.cd
 
 ui:
-  image: screwdrivercd/ui:v1.0.337
-  host: test-cd.screwdriver.cd
+  image: screwdrivercd/ui:v1.0.338
   avatarHost: "*.githubusercontent.com"
 
 store:
@@ -44,7 +56,7 @@ launcher:
 
 # Enable queue feature or not, this will bring up a queue-worker pod and a redis pod
 queue:
-  enabled: true
+  enabled: false
   image: screwdrivercd/queue-worker:v2.2.3
 
 redis:
@@ -52,6 +64,8 @@ redis:
     enabled: false
   master:
     persistence:
+      # To specify non-default storageClass, uncomment the line below and set it accordingly
+      # storageClass: "enc-gp2"
       enabled: true
       size: 10Gi
 
@@ -76,5 +90,7 @@ postgresql:
   service:
     port: 5432
   persistence:
+    # To specify non-default storageClass, uncomment the line below and set it accordingly
+    # storageClass: "enc-gp2"
     enabled: true
     size: 20Gi

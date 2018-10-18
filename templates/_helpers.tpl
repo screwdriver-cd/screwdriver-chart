@@ -35,10 +35,10 @@ Create chart name and version as used by the chart label.
 Create urls for api
 */}}
 {{- define "api.uri" -}}
-{{- if .Values.tls.enabled -}}
-{{- printf "https://%s" .Values.api.host -}}
+{{- if .Values.ingress.tls -}}
+{{- printf "https://%s%s" .Values.ingress.hosts.api .Values.ingress.singleHost.apiPath -}}
 {{- else -}}
-{{- printf "http://%s" .Values.api.host -}}
+{{- printf "http://%s%s" .Values.ingress.hosts.api .Values.ingress.singleHost.apiPath -}}
 {{- end -}}
 {{- end -}}
 
@@ -46,10 +46,10 @@ Create urls for api
 Create urls for ui
 */}}
 {{- define "ui.uri" -}}
-{{- if .Values.tls.enabled -}}
-{{- printf "https://%s" .Values.ui.host -}}
+{{- if .Values.ingress.tls -}}
+{{- printf "https://%s%s" .Values.ingress.hosts.ui .Values.ingress.singleHost.uiPath -}}
 {{- else -}}
-{{- printf "http://%s" .Values.ui.host -}}
+{{- printf "http://%s%s" .Values.ingress.hosts.ui .Values.ingress.singleHost.uiPath -}}
 {{- end -}}
 {{- end -}}
 
@@ -57,10 +57,10 @@ Create urls for ui
 Create urls for store
 */}}
 {{- define "store.uri" -}}
-{{- if .Values.tls.enabled -}}
-{{- printf "https://%s" .Values.store.host -}}
+{{- if .Values.ingress.tls -}}
+{{- printf "https://%s%s" .Values.ingress.hosts.store .Values.ingress.singleHost.storePath -}}
 {{- else -}}
-{{- printf "http://%s" .Values.store.host -}}
+{{- printf "http://%s%s" .Values.ingress.hosts.store .Values.ingress.singleHost.storePath -}}
 {{- end -}}
 {{- end -}}
 

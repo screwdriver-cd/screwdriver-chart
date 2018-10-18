@@ -51,6 +51,10 @@ spec:
         ports:
         - containerPort: 80
         env:
+          {{- if .Values.ingress.singleHost.enabled }}
+          - name: ROOT_URL
+            value: {{ .Values.ingress.singleHost.uiPath }}
+          {{- end }}
           - name: AVATAR_HOSTNAME
             value: "{{ .Values.ui.avatarHost }}"
           - name: ECOSYSTEM_API
