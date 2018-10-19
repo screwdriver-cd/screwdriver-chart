@@ -4,6 +4,8 @@
 
 namespace: test-screwdriver
 env: prod
+# Set it to true if your apps are running with https protocol
+https: false
 
 # Please enable it for RBAC enabled k8s cluster
 rbac:
@@ -21,6 +23,13 @@ ingress:
   # Use tls or not, if set to true, please refer to ingress.yaml and create tls secrets accordingly
   # Reference: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   tls: false
+  annotations:
+    # Override these annotations based on your load balancer configurations
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/tls-acme: "true"
+  # This property allows for reports up to a certain size to be uploaded to SonarQube
+  # nginx.ingress.kubernetes.io/proxy-body-size: "8m"
   hosts:
     api: test-api.screwdriver.cd
     ui: test-cd.screwdriver.cd
