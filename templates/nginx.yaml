@@ -83,5 +83,4 @@ spec:
         - /nginx-ingress-controller
         - --default-backend-service=$(POD_NAMESPACE)/default-http-backend
         - --configmap=$(POD_NAMESPACE)/nginx
-        - --tcp-services-configmap=$(POD_NAMESPACE)/nginx-tcp-services
 {{- end -}}

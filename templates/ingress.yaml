@@ -5,9 +5,10 @@ metadata:
   namespace: {{ .Values.namespace }}
   annotations:
     kubernetes.io/tls-acme: "true"
+    {{- if .Values.nginx.enabled }}
     kubernetes.io/ingress.class: "nginx"
-    ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/rewrite-target: /
+    {{- end }}
 spec:
   rules:
   {{- if .Values.ingress.singleHost.enabled }}
