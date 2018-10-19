@@ -34,10 +34,10 @@ notifications:
   enabled: false
 
 api:
-  image: screwdrivercd/screwdriver:v0.5.475
+  image: screwdrivercd/screwdriver:v0.5.486
 
 ui:
-  image: screwdrivercd/ui:v1.0.338
+  image: screwdrivercd/ui:v1.0.344
   avatarHost: "*.githubusercontent.com"
 
 store:
@@ -52,7 +52,7 @@ store:
 
 launcher:
   image: screwdrivercd/launcher
-  version: v5.0.20
+  version: v5.0.30
 
 # Enable queue feature or not, this will bring up a queue-worker pod and a redis pod
 queue:
@@ -66,7 +66,8 @@ redis:
     persistence:
       # To specify non-default storageClass, uncomment the line below and set it accordingly
       # storageClass: "enc-gp2"
-      enabled: true
+      # Enabled it if you want you data to be persistent
+      enabled: false
       size: 10Gi
 
 # To set up a new nginx or not
@@ -92,5 +93,6 @@ postgresql:
   persistence:
     # To specify non-default storageClass, uncomment the line below and set it accordingly
     # storageClass: "enc-gp2"
-    enabled: true
+    # Enabled it if you want you data to be persistent
+    enabled: false
     size: 20Gi

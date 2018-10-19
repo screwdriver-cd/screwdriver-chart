@@ -153,5 +153,9 @@ spec:
                 key: notifications
                 name: screwdriver-api-{{ .Values.env }}-secrets
           {{- end }}
+          {{- if .Values.ingress.singleHost.enabled }}
+          - name: OAUTH_REDIRECT_URI
+            value: {{ template "api.uri" . }}
+          {{- end }}
           - name: SECRET_WHITELIST
             value: '[]'
