@@ -9,6 +9,14 @@ env: prod
 rbac:
   enabled: false
 
+nginx:
+  # If your k8s cluster does not use nginx as Load Balancer, set it to false
+  enabled: true
+  # If you want screwdriver chart to create a nginx server for you, set it to true
+  create: false
+  image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.18.0
+  backend_image: gcr.io/google_containers/defaultbackend:1.0
+
 ingress:
   # Use tls or not, if set to true, please refer to ingress.yaml and create tls secrets accordingly
   # Reference: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
@@ -42,7 +50,6 @@ ui:
 
 store:
   image: screwdrivercd/store:v3.3.5
-  host: test-store.screwdriver.cd
   # if s3 is not enabled, will use pod's memory to store logs, artifacts and that't non-persistent
   s3:
     enabled: false
@@ -59,6 +66,8 @@ queue:
   enabled: false
   image: screwdrivercd/queue-worker:v2.2.3
 
+# Queue for screwdriver
+# Please refer to https://github.com/helm/charts/tree/master/stable/redis for more configurations
 redis:
   cluster:
     enabled: false
@@ -70,13 +79,8 @@ redis:
       enabled: false
       size: 10Gi
 
-# To set up a new nginx or not
-nginx:
-  create: false
-  image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.18.0
-  backend_image: gcr.io/google_containers/defaultbackend:1.0
-
 # Database for screwdriver api, can be either running as a pod or external
+# Please refer to https://github.com/helm/charts/tree/master/stable/postgresql for more configurations
 postgresql:
   enabled: true
   # To use an external PostgreSQL instance, follow the steps:
