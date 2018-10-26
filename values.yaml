@@ -52,13 +52,16 @@ notifications:
 
 api:
   image: screwdrivercd/screwdriver:v0.5.486
+  replicas: 1
 
 ui:
   image: screwdrivercd/ui:v1.0.344
   avatarHost: "*.githubusercontent.com"
+  replicas: 1
 
 store:
   image: screwdrivercd/store:v3.3.5
+  replicas: 1
   # if s3 is not enabled, will use pod's memory to store logs, artifacts and that't non-persistent
   s3:
     enabled: false
