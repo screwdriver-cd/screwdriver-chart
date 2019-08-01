@@ -6,6 +6,7 @@ This chart bootstraps the whole screwdriver ecosystem and also nginx ingress con
 
 - Kubernetes 1.6+
 - Helm
+- [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/). We recommend using [nginx-ingress-controller](https://kubernetes.github.io/ingress-nginx/deploy/) if you don't have any ingress controller pre-installed.
 
 ## Installing the chart:
 Please set up the following K8S secrets before installing the chart:
