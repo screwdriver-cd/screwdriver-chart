@@ -11,13 +11,11 @@ https: false
 rbac:
   enabled: false
 
+
+# To install nginx, please refer to https://kubernetes.github.io/ingress-nginx/deploy/
 nginx:
   # If your k8s cluster does not use nginx as Load Balancer, set it to false
   enabled: true
-  # If you want screwdriver chart to create a nginx server for you, set it to true
-  create: false
-  image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.18.0
-  backend_image: gcr.io/google_containers/defaultbackend:1.0
 
 ingress:
   # Use tls or not, if set to true, please refer to ingress.yaml and create tls secrets accordingly
