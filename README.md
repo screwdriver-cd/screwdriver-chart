@@ -5,7 +5,7 @@ This chart bootstraps the whole screwdriver ecosystem and also nginx ingress con
 ## Prerequisites
 
 - Kubernetes 1.6+
-- Helm
+- [Helm](https://github.com/helm/helm)
 - [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/). We recommend using [nginx-ingress-controller](https://kubernetes.github.io/ingress-nginx/deploy/) if you don't have any ingress controller pre-installed.
 
 ## Installing the chart:
@@ -21,11 +21,11 @@ An example secret template file `screwdriver-api-secrets.tmpl` is provided. Run 
 $ bash generate_secrets.sh
 # replace name and namespace with what you specify in values.yaml
 $ kubectl apply -f screwdriver-api-secrets.yaml
-# OPTIONAL: create the secrets for store if you configure to use s3 for store
+# OPTIONAL: create the secrets for store if you configure to use S3 for store
 $ kubectl apply -f screwdriver-store-secrets.yaml
 ```
 
-You can customize your screwdriver flavor in `values.yaml`, after that, install the chart:
+You can customize your Screwdriver flavor in `values.yaml`, after that, install the chart:
 
 ```bash
 $ helm dependency update
