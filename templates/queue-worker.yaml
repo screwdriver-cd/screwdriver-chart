@@ -50,6 +50,24 @@ spec:
             value: {{ template "api.uri" . }}
           - name: ECOSYSTEM_STORE
             value: {{ template "store.uri" . }}
+          - name: K8S_BUILD_TIMEOUT
+            value: {{ .Values.queue.buildTimeout }}
           - name: K8S_MAX_BUILD_TIMEOUT
-            value: "720"
+            value: {{ .Values.queue.maxBuildTimeout }}
+          - name: K8S_CPU_MICRO
+            value: {{ .Values.queue.resources.cpu.micro }}
+          - name: K8S_CPU_LOW
+            value: {{ .Values.queue.resources.cpu.low }}
+          - name: K8S_CPU_HIGH
+            value: {{ .Values.queue.resources.cpu.high }}
+          - name: K8S_CPU_TURBO
+            value: {{ .Values.queue.resources.cpu.turbo }}
+          - name: K8S_MEMORY_MICRO
+            value: {{ .Values.queue.resources.memory.micro }}
+          - name: K8S_MEMORY_LOW
+            value: {{ .Values.queue.resources.memory.low }}
+          - name: K8S_MEMORY_HIGH
+            value: {{ .Values.queue.resources.memory.high }}
+          - name: K8S_MEMORY_TURBO
+            value: {{ .Values.queue.resources.memory.turbo }}
 {{- end -}}

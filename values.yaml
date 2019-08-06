@@ -72,9 +72,28 @@ launcher:
   version: v6.0.12
 
 # Enable queue feature or not, this will bring up a queue-worker pod and a redis pod
+# Please refer to https://github.com/screwdriver-cd/queue-worker/blob/master/config/custom-environment-variables.yaml
 queue:
   enabled: false
   image: screwdrivercd/queue-worker:v2.7.9
+  buildTimeout: 90
+  maxBuildTimeout: 720
+  # Resources for build pod
+  resources:
+      # Number of cpu cores
+      # By default, builds run on LOW cpu
+      cpu:
+          micro: "0.5"
+          low: 2
+          high: 6
+          turbo: 12
+      # Memory in GB
+      # By default, builds run on LOW memory
+      memory:
+          micro: 1
+          low: 2
+          high: 12
+          turbo: 16
 
 # Queue for screwdriver
 # Please refer to https://github.com/helm/charts/tree/master/stable/redis for more configurations
