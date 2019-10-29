@@ -19,10 +19,10 @@ openssl rsa -in jwt.pem -pubout -out jwt.pub
 privatekey=`cat jwt.pem | base64`
 publickey=`cat jwt.pub | base64`
 
-sed -i.bak "s/{{jwtpublickey}}/$publickey/g" screwdriver-api-secrets.yaml
-sed -i.bak "s/{{jwtprivatekey}}/$privatekey/g" screwdriver-api-secrets.yaml
+sed -i.bak 's/{{jwtpublickey}}/$publickey/g' screwdriver-api-secrets.yaml
+sed -i.bak 's/{{jwtprivatekey}}/$privatekey/g' screwdriver-api-secrets.yaml
 
 scmsettings=`cat example-scm-settings.json | base64`
-sed -i.bak "s/{{scmsettings}}/$scmsettings/g" screwdriver-api-secrets.yaml
+sed -i.bak 's/{{scmsettings}}/$scmsettings/g' screwdriver-api-secrets.yaml
 
 rm screwdriver-api-secrets.yaml.bak
