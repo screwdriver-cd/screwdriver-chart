@@ -17,7 +17,7 @@ An example secret template file `screwdriver-api-secrets.tmpl` is provided. Run 
 
 ```bash
 # before running the script, please configure your scm settings in example-scm-settings.json
-# reference: https://github.com/screwdriver-cd/screwdriver/blob/master/config/custom-environment-variables.yaml#L248
+# reference: https://github.com/screwdriver-cd/screwdriver/blob/master/config/custom-environment-variables.yaml#L265
 $ bash generate_secrets.sh
 # replace name and namespace with what you specify in values.yaml
 $ kubectl apply -f screwdriver-api-secrets.yaml
