@@ -49,16 +49,16 @@ notifications:
   enabled: false
 
 api:
-  image: screwdrivercd/screwdriver:v0.5.722
+  image: screwdrivercd/screwdriver:stable
   replicas: 1
 
 ui:
-  image: screwdrivercd/ui:v1.0.440
+  image: screwdrivercd/ui:stable
   avatarHost: "*.githubusercontent.com"
   replicas: 1
 
 store:
-  image: screwdrivercd/store:v3.9.0
+  image: screwdrivercd/store:stable
   replicas: 1
   # if s3 is not enabled, will use pod's memory to store logs, artifacts and that't non-persistent
   s3:
@@ -69,13 +69,13 @@ store:
 
 launcher:
   image: screwdrivercd/launcher
-  version: v6.0.12
+  version: stable
 
 # Enable queue feature or not, this will bring up a queue-worker pod and a redis pod
 # Please refer to https://github.com/screwdriver-cd/queue-worker/blob/master/config/custom-environment-variables.yaml
 queue:
   enabled: false
-  image: screwdrivercd/queue-worker:v2.7.9
+  image: screwdrivercd/queue-worker:stable
   buildTimeout: 90
   maxBuildTimeout: 720
   # Resources for build pod
