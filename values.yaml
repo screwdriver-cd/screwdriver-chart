@@ -117,9 +117,9 @@ postgresql:
   # 2. set postgressql enabled to false to prevent creation of postgres as a pod
   # 3. uncomment the line below with your externl postgres server
   # postgresServer: ""
-  postgresUser: "sdUser"
-  postgresPassword: "sdPassword"
-  postgresDatabase: "screwdriver"
+  postgresqlUsername: "sdUser"
+  postgresqlPassword: "sdPassword"
+  postgresqlDatabase: "screwdriver"
   # Specify the TCP port that PostgreSQL should use
   service:
     port: 5432
