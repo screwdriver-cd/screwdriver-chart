@@ -17,7 +17,7 @@ spec:
     tier: app
 ---
 # requires service account to be created
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.env }}-sdapi
@@ -130,12 +130,12 @@ spec:
           - name: DATASTORE_SEQUELIZE_PASSWORD
             valueFrom:
               secretKeyRef:
-                key: postgres-password
+                key: postgresql-password
                 name: {{- if .Values.postgresql.enabled }} {{ template "postgresql.fullname" .}} {{- else }} "screwdriver-api-{{ .Values.env }}-secrets" {{- end }}
           - name: DATASTORE_SEQUELIZE_PORT
-            value: {{ .Values.postgresql.postgresPort | quote }}
+            value: {{ .Values.postgresql.postgresqlPort | quote }}
           - name: DATASTORE_SEQUELIZE_USERNAME
-            value: {{ .Values.postgresql.postgresUser | quote }}
+            value: {{ .Values.postgresql.postgresqlUsername | quote }}
           - name: SECRET_PASSWORD
             valueFrom:
               secretKeyRef:
