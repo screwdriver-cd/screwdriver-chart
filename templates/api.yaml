@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.env }}-sdapi
+  name: sdapi
   namespace: {{ .Values.namespace }}
   labels:
     app: api
@@ -20,7 +20,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.env }}-sdapi
+  name: sdapi
   namespace: {{ .Values.namespace }}
   labels:
     app: api
@@ -118,22 +118,22 @@ spec:
           - name: SCM_SETTINGS
             valueFrom:
               secretKeyRef:
-                name: screwdriver-api-{{ .Values.env }}-secrets
+                name: screwdriver-api-secrets
                 key: scmsettings
           - name: SECRET_JWT_PRIVATE_KEY
             valueFrom:
               secretKeyRef:
-                name: screwdriver-api-{{ .Values.env }}-secrets
+                name: screwdriver-api-secrets
                 key: jwtprivatekey
           - name: SECRET_JWT_PUBLIC_KEY
             valueFrom:
               secretKeyRef:
-                name: screwdriver-api-{{ .Values.env }}-secrets
+                name: screwdriver-api-secrets
                 key: jwtpublickey
           - name: SECRET_COOKIE_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: screwdriver-api-{{ .Values.env }}-secrets
+                name: screwdriver-api-secrets
                 key: cookiepassword
           - name: DATASTORE_SEQUELIZE_DIALECT
             value: postgres
@@ -145,7 +145,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 key: postgresql-password
-                name: {{- if .Values.postgresql.enabled }} {{ template "postgresql.fullname" .}} {{- else }} "screwdriver-api-{{ .Values.env }}-secrets" {{- end }}
+                name: {{- if .Values.postgresql.enabled }} {{ template "postgresql.fullname" .}} {{- else }} "screwdriver-api-secrets" {{- end }}
           - name: DATASTORE_SEQUELIZE_PORT
             value: {{ .Values.postgresql.postgresqlPort | quote }}
           - name: DATASTORE_SEQUELIZE_USERNAME
@@ -153,19 +153,19 @@ spec:
           - name: SECRET_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: screwdriver-api-{{ .Values.env }}-secrets
+                name: screwdriver-api-secrets
                 key: encryptionpassword
           - name: SECRET_HASHING_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: screwdriver-api-{{ .Values.env }}-secrets
+                name: screwdriver-api-secrets
                 key: hashingpassword
           {{- if .Values.notifications.enabled }}
           - name: NOTIFICATIONS
             valueFrom:
               secretKeyRef:
                 key: notifications
-                name: screwdriver-api-{{ .Values.env }}-secrets
+                name: screwdriver-api-secrets
           {{- end }}
           {{- if .Values.ingress.singleHost.enabled }}
           - name: OAUTH_REDIRECT_URI

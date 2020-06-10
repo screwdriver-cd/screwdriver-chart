@@ -16,15 +16,15 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: {{ .Values.env }}-sdui
+          serviceName: sdui
           servicePort: 80
         path: {{ .Values.ingress.singleHost.uiPath }}
       - backend:
-          serviceName: {{ .Values.env }}-sdapi
+          serviceName: sdapi
           servicePort: 80
         path: {{ .Values.ingress.singleHost.apiPath }}
       - backend:
-          serviceName: {{ .Values.env }}-sdstore
+          serviceName: sdstore
           servicePort: 80
         path: {{ .Values.ingress.singleHost.storePath }}
   {{- else }}
@@ -32,21 +32,21 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: {{ .Values.env }}-sdui
+          serviceName: sdui
           servicePort: 80
         path: /
   - host: {{ .Values.ingress.hosts.api }}
     http:
       paths:
       - backend:
-          serviceName: {{ .Values.env }}-sdapi
+          serviceName: sdapi
           servicePort: 80
         path: /
   - host: {{ .Values.ingress.hosts.store }}
     http:
       paths:
       - backend:
-          serviceName: {{ .Values.env }}-sdstore
+          serviceName: sdstore
           servicePort: 80
         path: /
   {{- end }}
