@@ -9,7 +9,9 @@ This chart bootstraps the whole screwdriver ecosystem and also nginx ingress con
 - [Ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/). We recommend using [nginx-ingress-controller](https://kubernetes.github.io/ingress-nginx/deploy/) if you don't have any ingress controller pre-installed.
 
 ## Installing the chart:
+
 Please set up the following K8S secrets before installing the chart:
+
 - screwdriver-api-{{ .Values.env }}-secrets
 - screwdriver-store-{{ .Values.env }}-secrets (OPTIONAL)
 
@@ -18,7 +20,7 @@ An example secret template file `screwdriver-api-secrets.tmpl` is provided. Run 
 ```bash
 # before running the script, please configure your scm settings in example-scm-settings.json
 # reference: https://github.com/screwdriver-cd/screwdriver/blob/master/config/custom-environment-variables.yaml#L265
-$ bash generate_secrets.sh
+$ ./generate_secrets.sh
 # replace name and namespace with what you specify in values.yaml
 $ kubectl apply -f screwdriver-api-secrets.yaml
 # OPTIONAL: create the secrets for store if you configure to use S3 for store
@@ -29,9 +31,9 @@ You can customize your Screwdriver flavor in `values.yaml`, after that, install 
 
 ```bash
 $ helm dependency update
-$ helm install . --name my-screwdriver --namespace your-namespace
+$ helm install my-screwdriver . --namespace your-namespace
 # To delete everything
-$ helm del --purge my-screwdriver
+$ helm uninstall my-screwdriver
 # To update the chart
 $ helm upgrade my-screwdriver . --namespace your-namespace
 ```

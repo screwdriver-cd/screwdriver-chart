@@ -9,8 +9,7 @@ https: false
 
 # Please enable it for RBAC enabled k8s cluster
 rbac:
-  enabled: false
-
+  enabled: true
 
 # To install nginx, please refer to https://kubernetes.github.io/ingress-nginx/deploy/
 nginx:
@@ -32,6 +31,7 @@ ingress:
     api: test-api.screwdriver.cd
     ui: test-cd.screwdriver.cd
     store: test-store.screwdriver.cd
+    queue: test-queue.screwdriver.cd
   # Enabled singleHost if your api, store, ui are sharing the same host with different path
   singleHost:
     enabled: false
@@ -42,6 +42,7 @@ ingress:
     apiPath: ""
     uiPath: ""
     storePath: ""
+    queuePath: ""
 
 # Set up build notifications or not, if yes please add notification config in your screwdirver-api-secret file
 # Reference config: https://github.com/screwdriver-cd/screwdriver/blob/master/config/default.yaml#L235
@@ -51,6 +52,7 @@ notifications:
 api:
   image: screwdrivercd/screwdriver:stable
   replicas: 1
+  ecosystem: {}
 
 ui:
   image: screwdrivercd/ui:stable
@@ -74,8 +76,9 @@ launcher:
 # Enable queue feature or not, this will bring up a queue-worker pod and a redis pod
 # Please refer to https://github.com/screwdriver-cd/queue-worker/blob/master/config/custom-environment-variables.yaml
 queue:
-  enabled: false
-  image: screwdrivercd/queue-worker:stable
+  enabled: true
+  replicas: 1
+  image: screwdrivercd/queue-service:stable
   buildTimeout: 90
   maxBuildTimeout: 720
   # Resources for build pod
@@ -94,12 +97,21 @@ queue:
           low: 2
           high: 12
           turbo: 16
+  k8sResources:
+    limits:
+      cpu: 2
+      memory: 2Gi
+    requests:
+      cpu: 1
+      memory: 1Gi
+  port: 80
+  ecosystem: {}
 
 # Queue for screwdriver
 # Please refer to https://github.com/helm/charts/tree/master/stable/redis for more configurations
 redis:
   cluster:
-    enabled: false
+    enabled: true
   master:
     persistence:
       # To specify non-default storageClass, uncomment the line below and set it accordingly

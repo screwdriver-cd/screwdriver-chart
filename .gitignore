@@ -3,3 +3,4 @@ jwt.pem
 jwt.pub
 screwdriver-api-secrets.yaml
 screwdriver-store-secrets.yaml
+example-scm-settings.json

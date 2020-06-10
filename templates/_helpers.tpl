@@ -65,6 +65,17 @@ Create urls for store
 {{- end -}}
 
 {{/*
+Create urls for queue-service
+*/}}
+{{- define "queue.uri" -}}
+{{- if .Values.https -}}
+{{- printf "https://%s%s" .Values.ingress.hosts.queue .Values.ingress.singleHost.queuePath -}}
+{{- else -}}
+{{- printf "http://%s%s" .Values.ingress.hosts.queue .Values.ingress.singleHost.queuePath -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
   Determine the hostname to use for postgresql
 */}}
 {{- define "postgresql.hostname" -}}
