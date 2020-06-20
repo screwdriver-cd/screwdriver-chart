@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ingress
+  name: {{ .Release.Name  }}-{{ template "screwdriver.name" .}}-ingress
   namespace: {{ .Values.namespace }}
   annotations:
     kubernetes.io/tls-acme: "true"
@@ -16,15 +16,15 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: sdui
+          serviceName:  {{ template "ui.fullname" . }}
           servicePort: 80
         path: {{ .Values.ingress.singleHost.uiPath }}
       - backend:
-          serviceName: sdapi
+          serviceName:  {{ template "api.fullname" . }}
           servicePort: 80
         path: {{ .Values.ingress.singleHost.apiPath }}
       - backend:
-          serviceName: sdstore
+          serviceName:  {{ template "store.fullname" . }}
           servicePort: 80
         path: {{ .Values.ingress.singleHost.storePath }}
   {{- else }}
@@ -32,21 +32,21 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: sdui
+          serviceName:  {{ template "ui.fullname" . }}
           servicePort: 80
         path: /
   - host: {{ .Values.ingress.hosts.api }}
     http:
       paths:
       - backend:
-          serviceName: sdapi
+          serviceName:  {{ template "api.fullname" . }}
           servicePort: 80
         path: /
   - host: {{ .Values.ingress.hosts.store }}
     http:
       paths:
       - backend:
-          serviceName: sdstore
+          serviceName:  {{ template "store.fullname" . }}
           servicePort: 80
         path: /
   {{- end }}
