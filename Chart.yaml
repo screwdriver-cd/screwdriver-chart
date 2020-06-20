@@ -4,6 +4,7 @@ description: Screwdriver is an open source build platform designed for Continuou
 name: screwdriver
 version: 0.1.0
 home: https://screwdriver.cd/
+icon: https://raw.githubusercontent.com/screwdriver-cd/homepage/master/brand/LOGOS/PNG/Screwdriver_Circle_Full%401x.png
 sources:
   - https://github.com/screwdriver-cd/screwdriver-chart
   - https://github.com/bitnami/bitnami-docker-postgresql
