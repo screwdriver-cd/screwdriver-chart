@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: sdqueue-service
+  name: {{ template "queue.fullname" . }}
   namespace: {{ .Values.namespace }}
   labels:
     app: queue-service
@@ -20,7 +20,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sdqueue-service
+  name: {{ template "queue.fullname" . }}
   namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.queue.replicas }}
