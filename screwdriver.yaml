@@ -1,7 +1,6 @@
 jobs:
   lint:
     requires: [~pr, ~commit]
-    image: ubuntu
+    image: quay.io/helmpack/chart-testing:latest
     steps:
-      - install-helm: curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
       - helm-lint: helm lint .
