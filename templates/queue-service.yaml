@@ -1,0 +1,180 @@
+{{- if .Values.queue.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "queue.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: queue-service
+    env: {{ .Values.env }}
+    tier: svc
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: queue-service
+    env: {{ .Values.env }}
+    tier: app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "queue.fullname" . }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.queue.replicas }}
+  selector:
+    matchLabels:
+      app: queue-service
+      env: {{ .Values.env }}
+      tier: app
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: queue-service
+        tier: app
+        env: {{ .Values.env }}
+    spec:
+      serviceAccountName: sd-buildbot
+      containers:
+      - name: screwdriver-queue-service
+        image: {{ .Values.queue.image }}
+        resources:
+          limits:
+            cpu: {{ .Values.queue.k8sResources.limits.cpu | quote }}
+            memory: {{ .Values.queue.k8sResources.limits.memory | quote }}
+          requests:
+            cpu: {{ .Values.queue.k8sResources.requests.cpu | quote }}
+            memory: {{ .Values.queue.k8sResources.requests.memory | quote }}
+        env:
+          - name: SECRET_JWT_PRIVATE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: screwdriver-api-secrets
+                key: queue-jwtprivatekey
+          - name: SECRET_JWT_PUBLIC_KEY
+            valueFrom:
+              secretKeyRef:
+                name: screwdriver-api-secrets
+                key: queue-jwtpublickey
+          - name: SECRET_JWT_SD_API_PUBLIC_KEY
+            valueFrom:
+              secretKeyRef:
+                name: screwdriver-api-secrets
+                key: jwtpublickey
+          {{- if .Values.queue.admins }}
+          - name: SECRET_ADMINS
+            value: {{ .Values.queue.admins | quote }}
+          {{- end }}  
+          - name: EXECUTOR_PLUGIN
+            value: {{ .Values.queue.executor | default "k8s" | quote }}
+          - name: K8S_HOST
+            value: {{ .Values.queue.k8s_host | default "kubernetes.default" | quote }}
+          - name: K8S_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: sd-buildbot-token
+                key: token
+          - name: K8S_JOBS_NAMESPACE
+            value: {{ .Values.namespace | quote }}
+          {{- if .Values.queue.dind }}
+          - name: DOCKER_FEATURE_ENABLED
+            value: {{ .Values.queue.dind | quote }}
+          {{- end }}
+          - name: K8S_CPU_MICRO
+            value: {{ .Values.queue.resources.cpu.micro | quote }}
+          - name: K8S_CPU_LOW
+            value: {{ .Values.queue.resources.cpu.low | quote }}
+          - name: K8S_CPU_HIGH
+            value: {{ .Values.queue.resources.cpu.high | quote }}
+          - name: K8S_CPU_TURBO
+            value: {{ .Values.queue.resources.cpu.turbo | quote }}
+          - name: K8S_MEMORY_MICRO
+            value: {{ .Values.queue.resources.memory.micro | quote }}
+          - name: K8S_MEMORY_LOW
+            value: {{ .Values.queue.resources.memory.low | quote }}
+          - name: K8S_MEMORY_HIGH
+            value: {{ .Values.queue.resources.memory.high | quote }}
+          - name: K8S_MEMORY_TURBO
+            value: {{ .Values.queue.resources.memory.turbo | quote }}
+          - name: K8S_BUILD_TIMEOUT
+            value: {{ .Values.queue.buildTimeout | quote }}
+          - name: K8S_MAX_BUILD_TIMEOUT
+            value: {{ .Values.queue.maxBuildTimeout | quote }}
+          {{- if .Values.queue.k8s_lifecycle_hooks }}
+          - name: K8S_LIFECYCLE_HOOKS
+            value: {{ .Values.queue.k8s_lifecycle_hooks | quote }}
+          {{- end }}
+          {{- if .Values.queue.k8s_node_selector }}
+          - name: K8S_NODE_SELECTORS
+            valiue: {{ .Values.queue.k8s_node_selector | quote }}
+          {{- end }}
+          {{- if .Values.queue.k8s_node_preferred_selector }}
+          - name: K8S_PREFERRED_NODE_SELECTORS
+            valiue: {{ .Values.queue.k8s_node_preferred_selector | quote }}
+          {{- end }}
+          {{- if .Values.queue.k8s_annotations }}
+          - name: K8S_ANNOTATIONS
+            valiue: {{ .Values.queue.k8s_annotations | quote }}
+          {{- end }}
+          - name: LAUNCH_IMAGE
+            value: {{ .Values.launcher.image }}
+          - name: LAUNCH_VERSION
+            value: {{ .Values.launcher.version }}
+          {{- if .Values.queue.executor_prefix }}
+          - name: EXECUTOR_PREFIX
+            value: {{ .Values.queue.executor_prefix | quote }}
+          {{- end }}
+          {{- if .Values.queue.circuit_timeout }}
+          - name: CIRCUIT_TIMEOUT
+            value: {{ .Values.queue.circuit_timeout | quote }}
+          {{- end }}
+          {{- if .Values.queue.retrydelay }}
+          - name: REQUEST_RETRYDELAY
+            value: {{ .Values.queue.retrydelay | quote }}
+          {{- end }}
+          - name: K8S_BASE_IMAGE
+            value: {{ .Values.queue.k8s_base_image | default "screwdrivercd/hyperctl-image:v1.0.8" | quote }}
+          {{- if .Values.queue.k8s_vm_node_selector }}
+          - name: K8S_VM_NODE_SELECTORS
+            valiue: {{ .Values.queue.k8s_vm_node_selector | quote }}
+          {{- end }}
+          {{- if .Values.queue.k8s_vm_node_preferred_selector }}
+          - name: K8S_VM_PREFERRED_NODE_SELECTORS
+            valiue: {{ .Values.queue.k8s_vm_node_preferred_selector | quote }}
+          {{- end }}
+          - name: PORT
+            value: {{ .Values.queue.port | quote }}
+          - name: URI
+            value: {{ template "queue.uri" . }}
+          - name: ECOSYSTEM_UI
+          {{- if .Values.queue.ecosystem.ui }}
+            value: {{ .Values.queue.ecosystem.ui | quote }}
+          {{- else }}
+            value: {{ template "ui.uri" . }}
+          {{- end }}
+          - name: ECOSYSTEM_API
+          {{- if .Values.queue.ecosystem.api }}
+            value: {{ .Values.queue.ecosystem.api | quote }}
+          {{- else }}
+            value: {{ template "api.uri" . }}
+          {{- end }}
+          - name: ECOSYSTEM_STORE
+          {{- if .Values.queue.ecosystem.store }}
+            value: {{ .Values.queue.ecosystem.store | quote }}
+          {{- else }}
+            value: {{ template "store.uri" . }}
+          {{- end }}
+          - name: REDIS_PORT
+            value: "6379"
+          - name: REDIS_HOST
+            value: {{ .Release.Name }}-redis-master
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-redis
+                key: redis-password
+{{- end -}}

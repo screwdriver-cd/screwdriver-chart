@@ -1,0 +1,6 @@
+jobs:
+  lint:
+    requires: [~pr, ~commit]
+    image: quay.io/helmpack/chart-testing:latest
+    steps:
+      - helm-lint: helm lint .

@@ -1,5 +1,20 @@
-apiVersion: v1
+apiVersion: v2
 appVersion: "1.0"
-description: A Helm chart for Kubernetes
+description: Screwdriver is an open source build platform designed for Continuous Delivery.
 name: screwdriver
-version: 0.0.1
+version: 0.1.0
+home: https://screwdriver.cd/
+icon: https://raw.githubusercontent.com/screwdriver-cd/homepage/master/brand/LOGOS/PNG/Screwdriver_Circle_Full%401x.png
+sources:
+  - https://github.com/screwdriver-cd/screwdriver-chart
+  - https://github.com/bitnami/bitnami-docker-postgresql
+  - https://github.com/bitnami/bitnami-docker-redis
+dependencies:
+  - name: redis
+    version: "^10.6.17"
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled
+  - name: postgresql
+    version: "^8.10.4"
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
