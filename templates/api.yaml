@@ -130,6 +130,11 @@ spec:
               secretKeyRef:
                 name: screwdriver-api-secrets
                 key: jwtpublickey
+          - name: SECRET_JWT_QUEUE_SVC_PUBLIC_KEY
+            valueFrom:
+              secretKeyRef:
+                name: screwdriver-api-secrets
+                key: jwtqueuesvcpublickey
           - name: SECRET_COOKIE_PASSWORD
             valueFrom:
               secretKeyRef:
