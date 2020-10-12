@@ -2,7 +2,7 @@
 # Setup sd-build as a reader. This has to be a
 # ClusterRoleBinding to get access to non-resource URLs
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: pod-read
 subjects:
@@ -18,7 +18,7 @@ roleRef:
 
 # Setup sd-build as a writer in its namespace
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: pod-write
 subjects:
