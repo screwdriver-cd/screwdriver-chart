@@ -110,15 +110,15 @@ spec:
           {{- end }}
           {{- if .Values.queue.k8s_node_selector }}
           - name: K8S_NODE_SELECTORS
-            valiue: {{ .Values.queue.k8s_node_selector | quote }}
+            value: {{ .Values.queue.k8s_node_selector | quote }}
           {{- end }}
           {{- if .Values.queue.k8s_node_preferred_selector }}
           - name: K8S_PREFERRED_NODE_SELECTORS
-            valiue: {{ .Values.queue.k8s_node_preferred_selector | quote }}
+            value: {{ .Values.queue.k8s_node_preferred_selector | quote }}
           {{- end }}
           {{- if .Values.queue.k8s_annotations }}
           - name: K8S_ANNOTATIONS
-            valiue: {{ .Values.queue.k8s_annotations | quote }}
+            value: {{ .Values.queue.k8s_annotations | quote }}
           {{- end }}
           - name: LAUNCH_IMAGE
             value: {{ .Values.launcher.image }}
@@ -140,11 +140,11 @@ spec:
             value: {{ .Values.queue.k8s_base_image | default "screwdrivercd/hyperctl-image:v1.0.8" | quote }}
           {{- if .Values.queue.k8s_vm_node_selector }}
           - name: K8S_VM_NODE_SELECTORS
-            valiue: {{ .Values.queue.k8s_vm_node_selector | quote }}
+            value: {{ .Values.queue.k8s_vm_node_selector | quote }}
           {{- end }}
           {{- if .Values.queue.k8s_vm_node_preferred_selector }}
           - name: K8S_VM_PREFERRED_NODE_SELECTORS
-            valiue: {{ .Values.queue.k8s_vm_node_preferred_selector | quote }}
+            value: {{ .Values.queue.k8s_vm_node_preferred_selector | quote }}
           {{- end }}
           - name: PORT
             value: {{ .Values.queue.port | quote }}
