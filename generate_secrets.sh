@@ -19,8 +19,8 @@ for target in 'api' 'queue'; do
   privatekey=$(cat "${target}-jwt.pem" | base64 | tr -d '\n')
   publickey=$(cat "${target}-jwt.pub" | base64 | tr -d '\n')
 
-  sed -i.bak "s/{{${target}-jwtpublickey}}/$publickey/g" screwdriver-api-secrets.yaml
-  sed -i.bak "s/{{${target}-jwtprivatekey}}/$privatekey/g" screwdriver-api-secrets.yaml
+  sed -i.bak "s~{{${target}-jwtpublickey}}/$publickey/g" screwdriver-api-secrets.yaml
+  sed -i.bak "s~{{${target}-jwtprivatekey}}/$privatekey/g" screwdriver-api-secrets.yaml
 done
 
 scmsettings=$(cat example-scm-settings.json | base64 | tr -d '\n')
