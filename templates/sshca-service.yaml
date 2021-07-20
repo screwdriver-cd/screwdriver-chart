@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sshca-secret
+  namespace: {{ .Values.namespace }}
+  annotations:
+    kubernetes.io/service-account.name: sshca-key
+type: Opaque
+data:
+{{ (.Files.Glob "key/*").AsSecrets | indent 2 }}
