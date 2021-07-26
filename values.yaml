@@ -146,6 +146,6 @@ postgresql:
     enabled: false
     size: 20Gi
 
-# Add secrets like ssh keys if needed
-enableSecret:
+# Add secrets to build container pods.
+secret:
   enabled: false
