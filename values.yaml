@@ -145,3 +145,7 @@ postgresql:
     # Enabled it if you want you data to be persistent
     enabled: false
     size: 20Gi
+
+# Add secrets like ssh keys if needed
+enableSecret:
+  enabled: false
