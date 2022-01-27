@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Release.Name  }}-{{ template "screwdriver.name" .}}-ingress
@@ -16,39 +16,54 @@ spec:
     http:
       paths:
       - backend:
-          serviceName:  {{ template "ui.fullname" . }}
-          servicePort: 80
+          service:
+            name:  {{ template "ui.fullname" . }}
+            port:
+              number: 80
         path: {{ .Values.ingress.singleHost.uiPath }}
       - backend:
-          serviceName:  {{ template "api.fullname" . }}
-          servicePort: 80
+          service:
+            name:  {{ template "api.fullname" . }}
+            port:
+              number: 80
         path: {{ .Values.ingress.singleHost.apiPath }}
       - backend:
-          serviceName:  {{ template "store.fullname" . }}
-          servicePort: 80
+          service:
+            name:  {{ template "store.fullname" . }}
+            port:
+              number: 80
         path: {{ .Values.ingress.singleHost.storePath }}
   {{- else }}
   - host: {{ .Values.ingress.hosts.ui }}
     http:
       paths:
       - backend:
-          serviceName:  {{ template "ui.fullname" . }}
-          servicePort: 80
+          service:
+            name:  {{ template "ui.fullname" . }}
+            port:
+              number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.hosts.api }}
     http:
       paths:
       - backend:
-          serviceName:  {{ template "api.fullname" . }}
-          servicePort: 80
+          service:
+            name:  {{ template "api.fullname" . }}
+            port:
+              number: 80
         path: /
+        pathType: Prefix
   - host: {{ .Values.ingress.hosts.store }}
     http:
       paths:
       - backend:
-          serviceName:  {{ template "store.fullname" . }}
-          servicePort: 80
+          service:
+            name:  {{ template "store.fullname" . }}
+            port:
+              number: 80
         path: /
+        pathType: Prefix
   {{- end }}
   {{- if .Values.ingress.tls }}
   tls:
